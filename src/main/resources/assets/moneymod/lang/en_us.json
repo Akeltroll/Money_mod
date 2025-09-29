@@ -1,0 +1,22 @@
+{
+  "item.moneymod.copper_coin": "Copper Coin",
+  "item.moneymod.iron_coin": "Iron Coin",
+  "item.moneymod.gold_coin": "Gold Coin",
+  "item.moneymod.emerald_coin": "Emerald Coin",
+  "item.moneymod.diamond_coin": "Diamond Coin",
+  "item.moneymod.netherite_coin": "Netherite Coin",
+  "item.moneymod.nether_star_coin": "Nether Star Coin",
+  
+  "item.moneymod.basic_money_pouch": "Basic Money Pouch",
+  "item.moneymod.advanced_money_pouch": "Advanced Money Pouch",
+  "item.moneymod.final_money_pouch": "Final Money Pouch",
+  
+  "container.moneymod.money_pouch_basic": "Basic Money Pouch",
+  "container.moneymod.money_pouch_advanced": "Advanced Money Pouch",
+  "container.moneymod.money_pouch_final": "Final Money Pouch",
+
+  "tooltip.moneymod.coin.value": "Value: %s",
+  "tooltip.moneymod.pouch.capacity": "Capacity: %s slots",
+  "tooltip.moneymod.pouch.total_value": "Total Value: %s"
+
+}

@@ -1,0 +1,17 @@
+{
+  "item.moneymod.copper_coin": "Pièce de Cuivre",
+  "item.moneymod.iron_coin": "Pièce de Fer",
+  "item.moneymod.gold_coin": "Pièce d'Or",
+  "item.moneymod.emerald_coin": "Pièce d'Émeraude",
+  "item.moneymod.diamond_coin": "Pièce de Diamant",
+  "item.moneymod.netherite_coin": "Pièce de Netherite",
+  "item.moneymod.nether_star_coin": "Pièce d'Étoile du Nether",
+  
+  "item.moneymod.basic_money_pouch": "Bourse Basique",
+  "item.moneymod.advanced_money_pouch": "Bourse Avancée",
+  "item.moneymod.final_money_pouch": "Bourse Finale",
+  
+  "container.moneymod.money_pouch_basic": "Bourse Basique",
+  "container.moneymod.money_pouch_advanced": "Bourse Avancée",
+  "container.moneymod.money_pouch_final": "Bourse Finale"
+}

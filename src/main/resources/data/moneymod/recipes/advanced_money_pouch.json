@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BCB",
+    "AAA",
+    "BCB"
+  ],
+  "key": {
+    "A": {
+      "item": "moneymod:basic_money_pouch"
+    },
+    "B": {
+      "item": "moneymod:gold_coin"
+    },
+    "C": {
+      "item": "minecraft:leather"
+    }
+  },
+  "result": {
+    "item": "moneymod:advanced_money_pouch",
+    "count": 1
+  }
+}
