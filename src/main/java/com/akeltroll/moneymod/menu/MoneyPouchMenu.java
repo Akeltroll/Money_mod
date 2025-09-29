@@ -48,10 +48,10 @@ public class MoneyPouchMenu extends AbstractContainerMenu {
         for (int i = 0; i < slots; i++) {
             int row = i / 9;
             int col = i % 9;
-            this.addSlot(new SlotItemHandler(handler, i, 8 + col * 18, 18 + row * 18));
+            this.addSlot(new SlotItemHandler(handler, i, 8 + col * 18, 17 + row * 18));
         }
 
-        int yOffset = 18 + rows * 18 + 14;
+        int yOffset = 17 + rows * 18 + 14;
 
         for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 9; ++col) {

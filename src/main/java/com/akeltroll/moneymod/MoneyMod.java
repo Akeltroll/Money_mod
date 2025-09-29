@@ -1,5 +1,6 @@
 package com.akeltroll.moneymod;
 
+import com.akeltroll.moneymod.compat.CuriosCompat;
 import com.akeltroll.moneymod.item.ModsItems;
 import com.akeltroll.moneymod.menu.ModMenuTypes;
 import com.akeltroll.moneymod.client.screen.MoneyPouchScreen;
@@ -12,11 +13,13 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
@@ -29,6 +32,7 @@ public class MoneyMod {
 
     public MoneyMod(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::commonSetup);
+        modEventBus.addListener(this::enqueueIMC);
 
         NeoForge.EVENT_BUS.register(this);
 
@@ -41,6 +45,14 @@ public class MoneyMod {
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
+        LOGGER.info("Money Mod common setup");
+    }
+
+    private void enqueueIMC(final InterModEnqueueEvent event) {
+        if (ModList.get().isLoaded("curios")) {
+            LOGGER.info("Curios detected, registering compatibility");
+            CuriosCompat.sendImc(event);
+        }
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {

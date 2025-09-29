@@ -1,5 +1,6 @@
 package com.akeltroll.moneymod.item;
 
+import com.akeltroll.moneymod.compat.CuriosCompat;
 import com.akeltroll.moneymod.menu.MoneyPouchMenu;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
@@ -14,11 +15,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
+import net.neoforged.fml.ModList;
+import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 import java.util.List;
 import java.util.function.Supplier;
 
-public class MoneyPouchItem extends Item {
+public class MoneyPouchItem extends Item implements ICurioItem {
     private final Supplier<Integer> slotsSupplier;
     private final PouchTier tier;
 
@@ -36,13 +40,17 @@ public class MoneyPouchItem extends Item {
         return tier;
     }
 
-
     public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         tooltipComponents.add(Component.translatable("tooltip.moneymod.pouch.capacity", getSlots()));
         
         int totalValue = calculateTotalValue(stack, context);
         if (totalValue > 0) {
             tooltipComponents.add(Component.translatable("tooltip.moneymod.pouch.total_value", totalValue));
+        }
+        
+        if (ModList.get().isLoaded("curios")) {
+            tooltipComponents.add(Component.translatable("tooltip.moneymod.pouch.curios_compatible")
+                .withStyle(style -> style.withColor(0xFFD700)));
         }
         
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
@@ -84,5 +92,32 @@ public class MoneyPouchItem extends Item {
         }
         
         return InteractionResultHolder.pass(stack);
+    }
+
+    // Méthodes ICurioItem pour Curios
+    public boolean canEquipFromUse(SlotContext slotContext, ItemStack stack) {
+        return true;
+    }
+
+    public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack) {
+        if (!slotContext.entity().level().isClientSide && slotContext.entity() instanceof Player player) {
+            player.displayClientMessage(
+                Component.translatable("message.moneymod.pouch_equipped"), 
+                true
+            );
+        }
+    }
+
+    public void onUnequip(SlotContext slotContext, ItemStack newStack, ItemStack stack) {
+        if (!slotContext.entity().level().isClientSide && slotContext.entity() instanceof Player player) {
+            player.displayClientMessage(
+                Component.translatable("message.moneymod.pouch_unequipped"), 
+                true
+            );
+        }
+    }
+
+    public boolean canEquip(SlotContext slotContext, ItemStack stack) {
+        return true;
     }
 }

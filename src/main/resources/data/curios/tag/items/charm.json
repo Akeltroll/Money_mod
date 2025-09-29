@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "moneymod:basic_money_pouch",
+    "moneymod:advanced_money_pouch",
+    "moneymod:final_money_pouch"
+  ]
+}

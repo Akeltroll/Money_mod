@@ -17,6 +17,13 @@
 
   "tooltip.moneymod.coin.value": "Value: %s",
   "tooltip.moneymod.pouch.capacity": "Capacity: %s slots",
-  "tooltip.moneymod.pouch.total_value": "Total Value: %s"
+  "tooltip.moneymod.pouch.total_value": "Total Value: %s",
+
+  "tooltip.moneymod.pouch.curios_compatible": "Can be equipped in Curios belt slot",
+  "message.moneymod.pouch_equipped": "Money pouch equipped",
+  "message.moneymod.pouch_unequipped": "Money pouch unequipped",
+
+  "curios.identifier.belt": "Belt",
+  "curios.modifiers.belt": "When in belt slot:"
 
 }
