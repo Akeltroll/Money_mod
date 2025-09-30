@@ -118,6 +118,7 @@ public class MoneyPouchItem extends Item implements ICurioItem {
     }
 
     public boolean canEquip(SlotContext slotContext, ItemStack stack) {
-        return true;
+        return slotContext.identifier().equals("belt");
     }
+
 }
