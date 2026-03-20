@@ -1,14 +1,13 @@
 package com.akeltroll.moneymod.item;
 
-import com.akeltroll.moneymod.compat.CuriosCompat;
 import com.akeltroll.moneymod.menu.MoneyPouchMenu;
+import com.akeltroll.moneymod.menu.PouchMenuProvider;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -82,21 +81,31 @@ public class MoneyPouchItem extends Item implements ICurioItem {
 
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        
-        if (!level.isClientSide && hand == InteractionHand.MAIN_HAND) {
-            player.openMenu(new SimpleMenuProvider(
-                (id, inv, p) -> new MoneyPouchMenu(id, inv, stack, getSlots()),
-                Component.translatable("container.moneymod.money_pouch_" + tier.name().toLowerCase())
-            ));
-            return InteractionResultHolder.success(stack);
+
+        // Shift + clic droit = équiper dans le slot Curios (géré par canEquipFromUse)
+        // Clic droit simple = ouvrir l'interface de la bourse
+        if (hand == InteractionHand.MAIN_HAND && !player.isShiftKeyDown()) {
+            if (!level.isClientSide) {
+                int slots = getSlots();
+                player.openMenu(
+                    new PouchMenuProvider(stack, slots, false,
+                        Component.translatable("container.moneymod.money_pouch_" + tier.name().toLowerCase())),
+                    buf -> {
+                        buf.writeInt(slots);
+                        buf.writeBoolean(false);
+                    }
+                );
+            }
+            return InteractionResultHolder.sidedSuccess(stack, level.isClientSide);
         }
-        
+
         return InteractionResultHolder.pass(stack);
     }
 
     // Méthodes ICurioItem pour Curios
     public boolean canEquipFromUse(SlotContext slotContext, ItemStack stack) {
-        return true;
+        // Shift + clic droit = équiper dans la belt
+        return slotContext.entity().isShiftKeyDown();
     }
 
     public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack) {
@@ -118,7 +127,14 @@ public class MoneyPouchItem extends Item implements ICurioItem {
     }
 
     public boolean canEquip(SlotContext slotContext, ItemStack stack) {
-        return slotContext.identifier().equals("belt");
+        if (slotContext == null) return false;
+        String id = String.valueOf(slotContext.identifier());
+        if (id.equals("belt") || id.endsWith(":belt") || id.endsWith("/belt")) {
+            return true;
+        }
+        // on laisse aussi true pour être permissif et laisser Curios/data gérer l'autorisation
+        return true;
     }
+
 
 }

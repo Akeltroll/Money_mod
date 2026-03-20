@@ -24,6 +24,8 @@
   "message.moneymod.pouch_unequipped": "Money pouch unequipped",
 
   "curios.identifier.belt": "Belt",
-  "curios.modifiers.belt": "When in belt slot:"
+  "curios.modifiers.belt": "When in belt slot:",
 
+  "key.categories.moneymod": "Money Mod",
+  "key.moneymod.open_pouch": "Open Equipped Pouch"
 }

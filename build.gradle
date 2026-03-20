@@ -22,6 +22,14 @@ repositories {
             includeGroup "top.theillusivec4.curios"
         }
     }
+    // Fallback si le maven theillusivec4 est down
+    maven {
+        name = "CurseMaven"
+        url = "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
 }
 
 base {

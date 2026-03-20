@@ -13,5 +13,8 @@
   
   "container.moneymod.money_pouch_basic": "Bourse Basique",
   "container.moneymod.money_pouch_advanced": "Bourse Avancée",
-  "container.moneymod.money_pouch_final": "Bourse Finale"
+  "container.moneymod.money_pouch_final": "Bourse Finale",
+
+  "key.categories.moneymod": "Money Mod",
+  "key.moneymod.open_pouch": "Ouvrir la Bourse Équipée"
 }

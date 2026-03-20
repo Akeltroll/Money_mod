@@ -1,9 +1,13 @@
 package com.akeltroll.moneymod;
 
+import com.akeltroll.moneymod.client.ModKeybindings;
 import com.akeltroll.moneymod.compat.CuriosCompat;
 import com.akeltroll.moneymod.item.ModsItems;
 import com.akeltroll.moneymod.menu.ModMenuTypes;
 import com.akeltroll.moneymod.client.screen.MoneyPouchScreen;
+import com.akeltroll.moneymod.network.OpenPouchPacket;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
@@ -20,6 +24,7 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.event.lifecycle.InterModEnqueueEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
@@ -33,6 +38,7 @@ public class MoneyMod {
     public MoneyMod(IEventBus modEventBus, ModContainer modContainer) {
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::enqueueIMC);
+        modEventBus.addListener(this::registerPayloads);
 
         NeoForge.EVENT_BUS.register(this);
 
@@ -44,6 +50,15 @@ public class MoneyMod {
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
+    private void registerPayloads(RegisterPayloadHandlersEvent event) {
+        PayloadRegistrar registrar = event.registrar("1");
+        registrar.playToServer(
+            OpenPouchPacket.TYPE,
+            OpenPouchPacket.STREAM_CODEC,
+            OpenPouchPacket::handle
+        );
+    }
+
     private void commonSetup(final FMLCommonSetupEvent event) {
         LOGGER.info("Money Mod common setup");
     }
@@ -52,6 +67,8 @@ public class MoneyMod {
         if (ModList.get().isLoaded("curios")) {
             LOGGER.info("Curios detected, registering compatibility");
             CuriosCompat.sendImc(event);
+            // Enregistre l'event pour ouvrir la pouch depuis le slot belt (clic droit main vide)
+            NeoForge.EVENT_BUS.register(CuriosCompat.class);
         }
     }
 
@@ -80,6 +97,16 @@ public class MoneyMod {
         @SubscribeEvent
         public static void onRegisterMenuScreens(RegisterMenuScreensEvent event) {
             event.register(ModMenuTypes.MONEY_POUCH.get(), MoneyPouchScreen::new);
+        }
+
+        @SubscribeEvent
+        public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
+            ModKeybindings.register(event);
+        }
+
+        @SubscribeEvent
+        public static void onClientSetup(FMLClientSetupEvent event) {
+            NeoForge.EVENT_BUS.addListener(ModKeybindings::onKeyInput);
         }
     }
 }
