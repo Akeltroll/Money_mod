@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {"item": "moneymod:diamond_coin"}
+  ],
+  "result": {
+    "count": 10,
+    "id": "moneymod:emerald_coin"
+  }
+}

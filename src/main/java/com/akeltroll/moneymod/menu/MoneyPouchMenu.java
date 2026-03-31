@@ -18,13 +18,21 @@ public class MoneyPouchMenu extends AbstractContainerMenu {
     private final int pouchSlots;
     private final ItemStackHandler handler;
     private final HolderLookup.Provider registries;
+    private final Player player;
+    private final boolean fromCuriosSlot;
 
     public MoneyPouchMenu(int id, Inventory playerInv, ItemStack pouchStack, int slots) {
+        this(id, playerInv, pouchStack, slots, false);
+    }
+
+    public MoneyPouchMenu(int id, Inventory playerInv, ItemStack pouchStack, int slots, boolean fromCuriosSlot) {
         super(ModMenuTypes.MONEY_POUCH.get(), id);
         this.pouchStack = pouchStack;
         this.pouchSlots = slots;
-        this.registries = playerInv.player.registryAccess(); 
-        
+        this.player = playerInv.player;
+        this.registries = playerInv.player.registryAccess();
+        this.fromCuriosSlot = fromCuriosSlot;
+
         this.handler = new ItemStackHandler(slots) {
             @Override
             protected void onContentsChanged(int slot) {
@@ -44,14 +52,14 @@ public class MoneyPouchMenu extends AbstractContainerMenu {
         }
 
         int rows = (slots + 8) / 9;
-        
+
         for (int i = 0; i < slots; i++) {
             int row = i / 9;
             int col = i % 9;
-            this.addSlot(new SlotItemHandler(handler, i, 8 + col * 18, 18 + row * 18));
+            this.addSlot(new SlotItemHandler(handler, i, 8 + col * 18, 17 + row * 18));
         }
 
-        int yOffset = 18 + rows * 18 + 14;
+        int yOffset = 17 + rows * 18 + 14;
 
         for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 9; ++col) {
@@ -66,9 +74,14 @@ public class MoneyPouchMenu extends AbstractContainerMenu {
     }
 
     private void saveToStack() {
+        // Côté client (cas Curios), pouchStack est EMPTY — on ne sauvegarde pas,
+        // le serveur est authoritative et sync via les packets de slots.
+        if (pouchStack.isEmpty()) return;
         var tag = pouchStack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
         tag.put("Inventory", handler.serializeNBT(registries));
         pouchStack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
+        // Notifier l'inventaire du joueur que le slot a changé pour la persistence
+        player.getInventory().setChanged();
     }
 
     @Override
@@ -107,7 +120,6 @@ public class MoneyPouchMenu extends AbstractContainerMenu {
             slot.onTake(player, stack);
         }
 
-        // CORRECTION: Sauvegarder explicitement après un shift-clic
         saveToStack();
 
         return result;
@@ -115,12 +127,13 @@ public class MoneyPouchMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        ItemStack mainHand = player.getMainHandItem();
-        ItemStack offHand = player.getOffhandItem();
-        
-        return (mainHand == pouchStack || offHand == pouchStack) ||
-               (mainHand.getItem() instanceof MoneyPouchItem) ||
-               (offHand.getItem() instanceof MoneyPouchItem);
+        if (fromCuriosSlot) {
+            return player.isAlive();
+        }
+        if (pouchStack.isEmpty() || !(pouchStack.getItem() instanceof MoneyPouchItem)) {
+            return false;
+        }
+        return player.getMainHandItem() == pouchStack || player.getOffhandItem() == pouchStack;
     }
 
     public int getPouchSlots() {

@@ -1,10 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "BCB",
-    "AAA",
-    "BCB"
-  ],
+  "category": "misc",
   "key": {
     "A": {
       "item": "moneymod:basic_money_pouch"
@@ -16,8 +12,14 @@
       "item": "minecraft:leather"
     }
   },
+  "pattern": [
+    "BCB",
+    "CAC",
+    "BCB"
+  ],
   "result": {
-    "item": "moneymod:advanced_money_pouch",
-    "count": 1
+    "count": 1,
+    "id": "moneymod:advanced_money_pouch"
+    
   }
 }
