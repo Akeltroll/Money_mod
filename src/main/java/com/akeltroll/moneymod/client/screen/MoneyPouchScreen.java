@@ -8,11 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 public class MoneyPouchScreen extends AbstractContainerScreen<MoneyPouchMenu> {
-    private static final ResourceLocation TEXTURE_9 =
-            ResourceLocation.withDefaultNamespace("textures/gui/container/generic_54.png");
-    private static final ResourceLocation TEXTURE_18 =
-            ResourceLocation.withDefaultNamespace("textures/gui/container/generic_54.png");
-    private static final ResourceLocation TEXTURE_27 =
+    private static final ResourceLocation TEXTURE =
             ResourceLocation.withDefaultNamespace("textures/gui/container/generic_54.png");
 
     private final ResourceLocation texture;
@@ -23,21 +19,19 @@ public class MoneyPouchScreen extends AbstractContainerScreen<MoneyPouchMenu> {
         
         int slots = menu.getPouchSlots();
         
+        this.texture = TEXTURE;
         if (slots == 9) {
-            this.texture = TEXTURE_9;
             this.containerRows = 1;
             this.imageHeight = 133;
-            this.inventoryLabelY = 38;  // 40 - 2
+            this.inventoryLabelY = 38;
         } else if (slots == 18) {
-            this.texture = TEXTURE_18;
             this.containerRows = 2;
             this.imageHeight = 151;
-            this.inventoryLabelY = 56;  // 58 - 2
+            this.inventoryLabelY = 56;
         } else {
-            this.texture = TEXTURE_27;
             this.containerRows = 3;
             this.imageHeight = 169;
-            this.inventoryLabelY = 74;  // 76 - 2
+            this.inventoryLabelY = 74;
         }
         
         this.imageWidth = 176;

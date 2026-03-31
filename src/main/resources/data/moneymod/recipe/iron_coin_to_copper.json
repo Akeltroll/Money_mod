@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {"item": "moneymod:iron_coin"}
+  ],
+  "result": {
+    "count": 10,
+    "id": "moneymod:copper_coin"
+  }
+}

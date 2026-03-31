@@ -127,20 +127,13 @@ public class MoneyPouchMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        // Curios belt slot : on garde le menu ouvert, le serveur fermera si nécessaire
-        // (mort du joueur, déconnexion, etc.). On vérifie avant pouchStack car côté
-        // client pouchStack est EMPTY dans ce cas.
         if (fromCuriosSlot) {
-            return true;
+            return player.isAlive();
         }
         if (pouchStack.isEmpty() || !(pouchStack.getItem() instanceof MoneyPouchItem)) {
             return false;
         }
-        ItemStack mainHand = player.getMainHandItem();
-        ItemStack offHand = player.getOffhandItem();
-        return mainHand == pouchStack || offHand == pouchStack
-                || mainHand.getItem() instanceof MoneyPouchItem
-                || offHand.getItem() instanceof MoneyPouchItem;
+        return player.getMainHandItem() == pouchStack || player.getOffhandItem() == pouchStack;
     }
 
     public int getPouchSlots() {

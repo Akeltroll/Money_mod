@@ -1,5 +1,6 @@
 package com.akeltroll.moneymod;
 
+import com.akeltroll.moneymod.CoinDropHandler;
 import com.akeltroll.moneymod.client.ModKeybindings;
 import com.akeltroll.moneymod.compat.CuriosCompat;
 import com.akeltroll.moneymod.item.ModsItems;
@@ -28,7 +29,6 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
-import net.neoforged.neoforge.event.server.ServerStartingEvent;
 
 @Mod(MoneyMod.MOD_ID)
 public class MoneyMod {
@@ -61,6 +61,7 @@ public class MoneyMod {
 
     private void commonSetup(final FMLCommonSetupEvent event) {
         LOGGER.info("Money Mod common setup");
+        NeoForge.EVENT_BUS.register(CoinDropHandler.class);
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {
@@ -86,10 +87,6 @@ public class MoneyMod {
             event.accept(ModsItems.ADVANCED_MONEY_POUCH);
             event.accept(ModsItems.FINAL_MONEY_POUCH);
         }
-    }
-
-    @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {
     }
 
     @EventBusSubscriber(modid = MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)

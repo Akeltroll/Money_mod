@@ -103,37 +103,36 @@ public class MoneyPouchItem extends Item implements ICurioItem {
     }
 
     // Méthodes ICurioItem pour Curios
+    @Override
     public boolean canEquipFromUse(SlotContext slotContext, ItemStack stack) {
-        // Shift + clic droit = équiper dans la belt
         return slotContext.entity().isShiftKeyDown();
     }
 
+    @Override
     public void onEquip(SlotContext slotContext, ItemStack prevStack, ItemStack stack) {
         if (!slotContext.entity().level().isClientSide && slotContext.entity() instanceof Player player) {
             player.displayClientMessage(
-                Component.translatable("message.moneymod.pouch_equipped"), 
+                Component.translatable("message.moneymod.pouch_equipped"),
                 true
             );
         }
     }
 
+    @Override
     public void onUnequip(SlotContext slotContext, ItemStack newStack, ItemStack stack) {
         if (!slotContext.entity().level().isClientSide && slotContext.entity() instanceof Player player) {
             player.displayClientMessage(
-                Component.translatable("message.moneymod.pouch_unequipped"), 
+                Component.translatable("message.moneymod.pouch_unequipped"),
                 true
             );
         }
     }
 
+    @Override
     public boolean canEquip(SlotContext slotContext, ItemStack stack) {
         if (slotContext == null) return false;
         String id = String.valueOf(slotContext.identifier());
-        if (id.equals("belt") || id.endsWith(":belt") || id.endsWith("/belt")) {
-            return true;
-        }
-        // on laisse aussi true pour être permissif et laisser Curios/data gérer l'autorisation
-        return true;
+        return id.equals("belt") || id.endsWith(":belt") || id.endsWith("/belt");
     }
 
 
